@@ -1,6 +1,6 @@
 class Api::ArticlesController < ApplicationController
   def index
-    articles = Article.all
-    render json: { articles: articles }
+    latest_articles = Article.by_recently_created.limit(20)
+    render json: { articles: latest_articles }
   end
 end
