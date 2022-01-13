@@ -1,8 +1,7 @@
 RSpec.describe 'GET /api/articles', type: :request do
   describe 'succesfully' do
-    subject { respsone }
+    subject { response }
     let!(:article) { 5.times { create(:article, title: 'Covid-19 is a pandemic') } }
-
     before do
       get '/api/articles'
     end
