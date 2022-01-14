@@ -4,8 +4,7 @@ describe 'GET /api/articles/:id', type: :request do
 
   describe 'succesfully' do
     before do
-      
-        get "/api/articles/#{article.id}"
+      get "/api/articles/#{article.id}"
     end
 
     it { is_expected.to have_http_status :ok }
