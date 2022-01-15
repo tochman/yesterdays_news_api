@@ -1,6 +1,10 @@
 class Api::ArticlesController < ApplicationController
   def index
-    latest_articles = Article.by_recently_created.limit(20)
+    if params['category'].nil?
+      latest_articles = Article.by_recently_created.limit(20)
+    else
+      latest_articles = Article.where(category: params['category']).by_recently_created.limit(20)
+    end
     render json: { articles: latest_articles }
   end
 
