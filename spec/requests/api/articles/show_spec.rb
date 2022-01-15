@@ -2,7 +2,7 @@ describe 'GET /api/articles/:id', type: :request do
   let!(:article) { create(:article, title: 'Hello World', body: 'The world is a strange place') }
   subject { response }
 
-  describe 'succesfully retrieves article' do
+  describe 'successfully retrieves article' do
     before do
       get "/api/articles/#{article.id}"
     end
@@ -10,10 +10,10 @@ describe 'GET /api/articles/:id', type: :request do
     it { is_expected.to have_http_status :ok }
 
     it 'is expected to respond with the requested article title' do
-      expect(response_json['single_article']['title']).to eq 'Hello World'
+      expect(response_json['article']['title']).to eq 'Hello World'
     end
     it 'is expected to respond with the requested article body' do
-      expect(response_json['single_article']['body']).to eq 'The world is a strange place'
+      expect(response_json['article']['body']).to eq 'The world is a strange place'
     end
   end
   describe 'unsuccessfully - id not found' do

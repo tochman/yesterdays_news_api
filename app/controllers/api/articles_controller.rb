@@ -9,9 +9,9 @@ class Api::ArticlesController < ApplicationController
   end
 
   def show
-    single_article = Article.find(params['id'])
+    article = Article.find(params['id'])
 
-    render json: { single_article: single_article }
+    render json: { article: article }
   rescue ActiveRecord::RecordNotFound => e
     render_error('Article not found', 404)
   end
