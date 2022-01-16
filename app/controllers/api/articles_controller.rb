@@ -10,15 +10,27 @@ class Api::ArticlesController < ApplicationController
 
   def show
     article = Article.find(params['id'])
-
     render json: { article: article }
   rescue ActiveRecord::RecordNotFound => e
     render_error('Article not found', 404)
+  end
+
+  def create
+    article = Article.create(article_params)
+    if article.persisted?
+      render json: { article: article }, status: 201
+    else
+      render_error(article.errors.full_messages.to_sentence, 422)
+    end
   end
 
   private
 
   def render_error(message, status)
     render json: { message: message }, status: status
+  end
+
+  def article_params
+    params[:article].permit(:title, :body, :category)
   end
 end
