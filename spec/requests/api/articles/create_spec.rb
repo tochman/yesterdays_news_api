@@ -22,6 +22,10 @@ RSpec.describe 'POST /api/articles', type: :request do
     it 'is expected to have saved the article in the database' do
       expect(@article.title).to eq 'Mars and Venus together'
     end
+
+    it 'is expected to respond with a confirmation message' do
+      expect(response_json['message']).to eq "Article created successfully"
+    end
   end
 
   describe 'unsuccessfully' do
@@ -40,8 +44,10 @@ RSpec.describe 'POST /api/articles', type: :request do
     describe 'due to missing title' do
       before do
         post '/api/articles', params: {
-          body: 'There is water on Mars',
-          category: 'news'
+          article: {
+            body: 'There is water on Mars',
+            category: 'news'
+          }
         }
       end
 
@@ -55,8 +61,10 @@ RSpec.describe 'POST /api/articles', type: :request do
     describe 'due to missing body' do
       before do
         post '/api/articles', params: {
-          title: 'Mars and Venus together',
-          category: 'news'
+          article: {
+            title: 'Mars and Venus together',
+            category: 'news'
+          }
         }
       end
 
@@ -70,8 +78,10 @@ RSpec.describe 'POST /api/articles', type: :request do
     describe 'due to missing category' do
       before do
         post '/api/articles', params: {
-          title: 'Mars and Venus together',
-          body: 'There is water on Mars'
+          article: {
+            title: 'Mars and Venus together',
+            body: 'There is water on Mars'
+          }
         }
       end
 
