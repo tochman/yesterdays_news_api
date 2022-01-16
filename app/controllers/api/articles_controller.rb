@@ -1,10 +1,11 @@
 class Api::ArticlesController < ApplicationController
+  before_action :validate_params_presence, only: [:create]
   def index
-    if params['category'].nil?
-      latest_articles = Article.by_recently_created.limit(20)
-    else
-      latest_articles = Article.where(category: params['category']).by_recently_created.limit(20)
-    end
+    latest_articles = if params['category'].nil?
+                        Article.by_recently_created.limit(20)
+                      else
+                        Article.where(category: params['category']).by_recently_created.limit(20)
+                      end
     render json: { articles: latest_articles }
   end
 
@@ -32,5 +33,17 @@ class Api::ArticlesController < ApplicationController
 
   def article_params
     params[:article].permit(:title, :body, :category)
+  end
+
+  def validate_params_presence
+    if params[:article].nil?
+      render_error('Missing params', :unprocessable_entity)
+    elsif params[:article][:title].nil?
+      render_error("Title can't be blank", :unprocessable_entity)
+    elsif params[:article][:body].nil?
+      render_error("Body can't be blank", :unprocessable_entity)
+    elsif params[:article][:category].nil?
+      render_error("Category can't be blank", :unprocessable_entity)
+    end
   end
 end

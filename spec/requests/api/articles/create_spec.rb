@@ -26,19 +26,60 @@ RSpec.describe 'POST /api/articles', type: :request do
 
   describe 'unsuccessfully' do
     describe 'due to missing params' do
-      # write test in case we receive a POST request with missing params
+      before do
+        post '/api/articles', params: {}
+      end
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+
+      it 'is expected to respond with an error message' do
+        expect(response_json['message']).to eq 'Missing params'
+      end
     end
 
     describe 'due to missing title' do
-      # write test in case we receive a POST request with missing title
+      before do
+        post '/api/articles', params: {
+          body: 'There is water on Mars',
+          category: 'news'
+        }
+      end
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+
+      it 'is expected to respond with an error message' do
+        expect(response_json['message']).to eq "Title can't be blank"
+      end
     end
 
     describe 'due to missing body' do
-      # write test in case we receive a POST request with missing body
+      before do
+        post '/api/articles', params: {
+          title: 'Mars and Venus together',
+          category: 'news'
+        }
+      end
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+
+      it 'is expected to respond with an error message' do
+        expect(response_json['message']).to eq "Body can't be blank"
+      end
     end
 
     describe 'due to missing category' do
-      # write test in case we receive a POST request with missing category
+      before do
+        post '/api/articles', params: {
+          title: 'Mars and Venus together',
+          body: 'There is water on Mars'
+        }
+      end
+
+      it { is_expected.to have_http_status :unprocessable_entity }
+
+      it 'is expected to respond with an error message' do
+        expect(response_json['message']).to eq "Category can't be blank"
+      end
     end
   end
 end
