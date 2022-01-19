@@ -9,6 +9,7 @@ gem 'puma', '~> 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.4'
 gem 'active_model_serializers', '~> 0.10.0'
+gem 'devise_token_auth'
 
 group :development, :test do
   gem 'factory_bot_rails'
