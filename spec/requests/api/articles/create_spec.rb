@@ -1,5 +1,7 @@
 RSpec.describe 'POST /api/articles', type: :request do
   subject { response }
+  let(:user) { create(:user) }
+  let(:credentials) { user.create_new_auth_token }
 
   describe 'with valid params' do
     describe 'as anonumos user' do
@@ -18,7 +20,6 @@ RSpec.describe 'POST /api/articles', type: :request do
     end
 
     describe 'as an authenticated user' do
-      let(:credentials) { {} }
       before do
         post '/api/articles', params: {
           article: {
@@ -49,7 +50,7 @@ RSpec.describe 'POST /api/articles', type: :request do
   describe 'unsuccessfully' do
     describe 'due to missing params' do
       before do
-        post '/api/articles', params: {}
+        post '/api/articles', params: {}, headers: credentials
       end
 
       it { is_expected.to have_http_status :unprocessable_entity }
@@ -66,7 +67,7 @@ RSpec.describe 'POST /api/articles', type: :request do
             body: 'There is water on Mars',
             category: 'news'
           }
-        }
+        }, headers: credentials
       end
 
       it { is_expected.to have_http_status :unprocessable_entity }
@@ -83,7 +84,7 @@ RSpec.describe 'POST /api/articles', type: :request do
             title: 'Mars and Venus together',
             category: 'news'
           }
-        }
+        }, headers: credentials
       end
 
       it { is_expected.to have_http_status :unprocessable_entity }
@@ -100,7 +101,7 @@ RSpec.describe 'POST /api/articles', type: :request do
             title: 'Mars and Venus together',
             body: 'There is water on Mars'
           }
-        }
+        }, headers: credentials
       end
 
       it { is_expected.to have_http_status :unprocessable_entity }
