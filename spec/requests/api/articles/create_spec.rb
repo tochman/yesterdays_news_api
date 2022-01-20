@@ -1,6 +1,5 @@
 RSpec.describe 'POST /api/articles', type: :request do
   subject { response }
-  # let(:user) { create(:user) }
   let(:journalist) { create(:user, role: 'journalist') }
   let(:user) { create(:user, role: nil) }
   let(:credentials) { journalist.create_new_auth_token }
@@ -98,7 +97,7 @@ RSpec.describe 'POST /api/articles', type: :request do
       end
     end
   end
-  describe 'as anonumos user' do
+  describe 'as anonymous user' do
     before do
       post '/api/articles', params: {
         article: {
@@ -125,6 +124,6 @@ RSpec.describe 'POST /api/articles', type: :request do
       @article = Article.last
     end
 
-    it { is_expected.to have_http_status :unauthorized}
+    it { is_expected.to have_http_status :unauthorized }
   end
 end

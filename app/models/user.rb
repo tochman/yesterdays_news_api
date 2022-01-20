@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
+  validates_presence_of :name
+
   enum role: { editor: 1, journalist: 2 }
 
   def is_staff?

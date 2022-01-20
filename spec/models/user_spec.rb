@@ -1,5 +1,20 @@
 RSpec.describe User, type: :model do
-  it { is_expected.to have_db_column(:role).of_type(:integer) }
+  describe 'DB table' do
+    it { is_expected.to have_db_column(:name).of_type(:string) }
+    it { is_expected.to have_db_column(:email).of_type(:string) }
+    it { is_expected.to have_db_column(:role).of_type(:integer) }
+  end
+
+  describe 'Validations' do
+    it { is_expected.to validate_presence_of :name }
+    it { is_expected.to validate_presence_of :email }
+  end
+
+  describe 'Factory' do
+    it 'is expected to have a valid Factory' do
+      expect(create(:user)).to be_valid
+    end
+  end
 
   describe 'Class methods' do
     describe 'role' do
