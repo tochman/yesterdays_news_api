@@ -9,6 +9,7 @@ RSpec.describe 'POST /api/auth', type: :request do
              password: 'password',
              password_confirmation: 'password'
            }
+      @user = User.last
     end
 
     it { is_expected.to have_http_status 200 }
@@ -18,15 +19,15 @@ RSpec.describe 'POST /api/auth', type: :request do
     end
 
     it 'is expected that database update with new user' do
-      expect(User.all.first.email).to eq 'johndoe@email.com'
+      expect(@user.email).to eq 'johndoe@email.com'
     end
 
     it 'is expected that database update with new user' do
-      expect(User.all.first.name).to eq 'John Doe'
+      expect(@user.name).to eq 'John Doe'
     end
   end
 
-  describe 'unsuccessfull registration' do
+  describe 'with password not matching' do
     before do
       post '/api/auth',
            params: {
@@ -57,7 +58,7 @@ RSpec.describe 'POST /api/auth', type: :request do
     end
 
     it 'is expected to respond with error message' do
-      expect(response_json['errors']['full_messages']).to eq ["Email is not an email"]
+      expect(response_json['errors']['full_messages']).to eq ['Email is not an email']
     end
   end
 end
