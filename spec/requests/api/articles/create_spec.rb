@@ -1,25 +1,13 @@
 RSpec.describe 'POST /api/articles', type: :request do
   subject { response }
-  let(:user) { create(:user) }
-  let(:credentials) { user.create_new_auth_token }
+  # let(:user) { create(:user) }
+  let(:journalist) { create(:user, role: 'journalist') }
+  let(:user) { create(:user, role: nil) }
+  let(:credentials) { journalist.create_new_auth_token }
+  let(:non_staff_credentials) { user.create_new_auth_token }
 
-  describe 'with valid params' do
-    describe 'as anonumos user' do
-      before do
-        post '/api/articles', params: {
-          article: {
-            title: 'Mars and Venus together',
-            body: 'There is water on Mars',
-            category: 'news'
-          }
-        }, headers: nil
-        @article = Article.last
-      end
-
-      it { is_expected.to have_http_status :unauthorized }
-    end
-
-    describe 'as an authenticated user' do
+  describe 'as an authenticated user' do
+    describe 'successfully' do
       before do
         post '/api/articles', params: {
           article: {
@@ -45,70 +33,98 @@ RSpec.describe 'POST /api/articles', type: :request do
         expect(response_json['message']).to eq 'Article created successfully'
       end
     end
+    describe 'unsuccessfully' do
+      describe 'due to missing params' do
+        before do
+          post '/api/articles', params: {}, headers: credentials
+        end
+
+        it { is_expected.to have_http_status :unprocessable_entity }
+
+        it 'is expected to respond with an error message' do
+          expect(response_json['message']).to eq 'Missing params'
+        end
+      end
+
+      describe 'due to missing title' do
+        before do
+          post '/api/articles', params: {
+            article: {
+              body: 'There is water on Mars',
+              category: 'news'
+            }
+          }, headers: credentials
+        end
+
+        it { is_expected.to have_http_status :unprocessable_entity }
+
+        it 'is expected to respond with an error message' do
+          expect(response_json['message']).to eq "Title can't be blank"
+        end
+      end
+
+      describe 'due to missing body' do
+        before do
+          post '/api/articles', params: {
+            article: {
+              title: 'Mars and Venus together',
+              category: 'news'
+            }
+          }, headers: credentials
+        end
+
+        it { is_expected.to have_http_status :unprocessable_entity }
+
+        it 'is expected to respond with an error message' do
+          expect(response_json['message']).to eq "Body can't be blank"
+        end
+      end
+
+      describe 'due to missing category' do
+        before do
+          post '/api/articles', params: {
+            article: {
+              title: 'Mars and Venus together',
+              body: 'There is water on Mars'
+            }
+          }, headers: credentials
+        end
+
+        it { is_expected.to have_http_status :unprocessable_entity }
+
+        it 'is expected to respond with an error message' do
+          expect(response_json['message']).to eq "Category can't be blank"
+        end
+      end
+    end
   end
-
-  describe 'unsuccessfully' do
-    describe 'due to missing params' do
-      before do
-        post '/api/articles', params: {}, headers: credentials
-      end
-
-      it { is_expected.to have_http_status :unprocessable_entity }
-
-      it 'is expected to respond with an error message' do
-        expect(response_json['message']).to eq 'Missing params'
-      end
+  describe 'as anonumos user' do
+    before do
+      post '/api/articles', params: {
+        article: {
+          title: 'Mars and Venus together',
+          body: 'There is water on Mars',
+          category: 'news'
+        }
+      }, headers: nil
+      @article = Article.last
     end
 
-    describe 'due to missing title' do
-      before do
-        post '/api/articles', params: {
-          article: {
-            body: 'There is water on Mars',
-            category: 'news'
-          }
-        }, headers: credentials
-      end
-
-      it { is_expected.to have_http_status :unprocessable_entity }
-
-      it 'is expected to respond with an error message' do
-        expect(response_json['message']).to eq "Title can't be blank"
-      end
+    it { is_expected.to have_http_status :unauthorized }
+  end
+  
+  describe 'as a user that is neither journalist or editor' do
+    before do
+      post '/api/articles', params: {
+        article: {
+          title: 'Mars and Venus together',
+          body: 'There is water on Mars',
+          category: 'news'
+        }
+      }, headers: non_staff_credentials
+      @article = Article.last
     end
 
-    describe 'due to missing body' do
-      before do
-        post '/api/articles', params: {
-          article: {
-            title: 'Mars and Venus together',
-            category: 'news'
-          }
-        }, headers: credentials
-      end
-
-      it { is_expected.to have_http_status :unprocessable_entity }
-
-      it 'is expected to respond with an error message' do
-        expect(response_json['message']).to eq "Body can't be blank"
-      end
-    end
-
-    describe 'due to missing category' do
-      before do
-        post '/api/articles', params: {
-          article: {
-            title: 'Mars and Venus together',
-            body: 'There is water on Mars'
-          }
-        }, headers: credentials
-      end
-
-      it { is_expected.to have_http_status :unprocessable_entity }
-
-      it 'is expected to respond with an error message' do
-        expect(response_json['message']).to eq "Category can't be blank"
-      end
-    end
+    it { is_expected.to have_http_status :unauthorized}
   end
 end

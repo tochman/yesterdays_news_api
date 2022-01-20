@@ -7,4 +7,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
+
+  enum role: { editor: 1, journalist: 2 }
+
+  def is_staff?
+    journalist? || editor?
+  end
 end

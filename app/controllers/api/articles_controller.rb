@@ -1,6 +1,9 @@
 class Api::ArticlesController < ApplicationController
   before_action :authenticate_user!, only: [:create]
+  # before_action :is_user_staff?, only: [:create]
   before_action :validate_params_presence, only: [:create]
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   def index
     articles = if params['category'].nil?
                  Article.by_recently_created.limit(20)
@@ -20,6 +23,7 @@ class Api::ArticlesController < ApplicationController
   end
 
   def create
+    authorize Article.create
     article = Article.create(article_params)
     if article.persisted?
       render json: { article: article, message: 'Article created successfully' }, status: 201
@@ -48,5 +52,9 @@ class Api::ArticlesController < ApplicationController
     elsif params[:article][:category].nil?
       render_error("Category can't be blank", :unprocessable_entity)
     end
+  end
+
+  def user_not_authorized
+    render json: { message: 'no no!' }, status: 401
   end
 end
