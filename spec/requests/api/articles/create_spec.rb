@@ -4,7 +4,6 @@ RSpec.describe 'POST /api/articles', type: :request do
   let(:user) { create(:user, role: nil) }
   let(:credentials) { journalist.create_new_auth_token }
   let(:non_staff_credentials) { user.create_new_auth_token }
-  let!(:category) { create(:category) }
 
   describe 'as an authenticated user' do
     describe 'successfully' do
@@ -13,7 +12,7 @@ RSpec.describe 'POST /api/articles', type: :request do
           article: {
             title: 'Mars and Venus together',
             body: 'There is water on Mars',
-            category_id: category.id
+            category: 'news'
           }
         }, headers: credentials
         @article = Article.last
@@ -93,7 +92,7 @@ RSpec.describe 'POST /api/articles', type: :request do
         it { is_expected.to have_http_status :unprocessable_entity }
 
         it 'is expected to respond with an error message' do
-          expect(response_json['message']).to eq "Category can't be blank and Category must exist"
+          expect(response_json['message']).to eq "Category can't be blank"
         end
       end
     end
@@ -112,7 +111,7 @@ RSpec.describe 'POST /api/articles', type: :request do
 
     it { is_expected.to have_http_status :unauthorized }
   end
-
+  
   describe 'as a user that is neither journalist or editor' do
     before do
       post '/api/articles', params: {
