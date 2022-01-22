@@ -44,8 +44,6 @@ class Api::ArticlesController < ApplicationController
       render_error("Title can't be blank", :unprocessable_entity)
     elsif params[:article][:body].nil?
       render_error("Body can't be blank", :unprocessable_entity)
-    elsif params[:article][:body].nil?
-      render_error("Category can't be blank", :unprocessable_entity)
     end
   end
 
