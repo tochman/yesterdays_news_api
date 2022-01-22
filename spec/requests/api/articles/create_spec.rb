@@ -4,6 +4,7 @@ RSpec.describe 'POST /api/articles', type: :request do
   let(:user) { create(:user, role: nil) }
   let(:credentials) { journalist.create_new_auth_token }
   let(:non_staff_credentials) { user.create_new_auth_token }
+  let!(:category) { create(:category, name: 'news') }
 
   describe 'as an authenticated user' do
     describe 'successfully' do
@@ -111,7 +112,7 @@ RSpec.describe 'POST /api/articles', type: :request do
 
     it { is_expected.to have_http_status :unauthorized }
   end
-  
+
   describe 'as a user that is neither journalist or editor' do
     before do
       post '/api/articles', params: {
