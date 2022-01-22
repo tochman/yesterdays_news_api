@@ -23,7 +23,7 @@ class Api::ArticlesController < ApplicationController
   def create
     authorize Article.create
     article = Article.create(article_params)
-    article.category = Category.find_by name: params["article"]["category"]
+    article.category = Category.find_by name: params['article']['category']
     article.save
     if article.persisted?
       render json: { article: article, message: 'Article created successfully' }, status: 201
