@@ -6,6 +6,6 @@ class Article::ShowSerializer < ActiveModel::Serializer
   end
 
   def category
-    object.category.humanize
+    object.category.name.humanize
   end
 end

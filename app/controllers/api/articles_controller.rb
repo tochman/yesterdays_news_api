@@ -5,7 +5,7 @@ class Api::ArticlesController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   def index
     articles = Article.by_recently_created.limit(20)
-    # I removed the if else since we have a dropdown it is impossible to submit an article without category.
+
     render json: articles, each_serializer: Article::IndexSerializer
   end
 
@@ -19,6 +19,7 @@ class Api::ArticlesController < ApplicationController
   def create
     authorize Article.create
     article = Article.create(article_params)
+
     if article.persisted?
       render json: { article: article, message: 'Article created successfully' }, status: 201
     else
@@ -43,8 +44,8 @@ class Api::ArticlesController < ApplicationController
       render_error("Title can't be blank", :unprocessable_entity)
     elsif params[:article][:body].nil?
       render_error("Body can't be blank", :unprocessable_entity)
-    elsif params[:article][:category_id].nil?
-      render_error("Category_id can't be blank", :unprocessable_entity)
+    elsif params[:article][:body].nil?
+      render_error("Category can't be blank", :unprocessable_entity)
     end
   end
 

@@ -6,6 +6,6 @@ class Article::IndexSerializer < ActiveModel::Serializer
   end
 
   def category
-    object.category.name
+    object.category.name.humanize
   end
 end
