@@ -1,10 +1,10 @@
 RSpec.describe Category, type: :model do
   describe 'Database table' do
-    it { is_expected.to have_db_column(:category).of_type(:string) }
+    it { is_expected.to have_db_column(:name).of_type(:string) }
   end
 
   describe 'Validations' do
-    it { is_expected.to validate_presence_of :category }
+    it { is_expected.to validate_presence_of :name }
   end
 
   describe 'Factory' do
