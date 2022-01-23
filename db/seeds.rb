@@ -13,23 +13,23 @@ category_politics = Category.create(name: 'politics')
 category_economy = Category.create(name: 'economy')
 category_news = Category.create(name: 'news')
 
-articles = [{ title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_sports.id },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_sports.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_sports.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_sports.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_politics.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_politics.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_politics.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_politics.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_economy.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_economy.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_economy.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_economy.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_news.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_news.id  },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_news.id },
-            { title: Faker::Book.title, body: Faker::Quote.matz, category_id: category_news.id }]
+articles = [{ title: Faker::Book.title, body: Faker::Quote.matz, category: category_sports },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_sports  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_sports  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_sports  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_politics  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_politics  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_politics  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_politics  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_economy },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_economy  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_economy  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_economy  },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_news },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_news },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_news },
+            { title: Faker::Book.title, body: Faker::Quote.matz, category: category_news }]
 
 articles.each do |article|
-  Article.create(title: article[:title], body: article[:body], category_id: article[:category_id])
+  Article.create(title: article[:title], body: article[:body], category: article[:category])
 end
