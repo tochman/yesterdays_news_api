@@ -11,10 +11,10 @@ gem 'puma', '~> 5.0'
 gem 'rack-cors'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.4'
 gem 'pundit', github: 'varvet/pundit'
+gem 'faker'
 
 group :development, :test do
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
