@@ -1,5 +1,5 @@
 class Article::IndexSerializer < ActiveModel::Serializer
-  attributes :id, :title, :published, :category
+  attributes :id, :title, :teaser, :published, :category
 
   def published
     object.created_at
@@ -7,5 +7,9 @@ class Article::IndexSerializer < ActiveModel::Serializer
 
   def category
     object.category.name.humanize
+  end
+
+  def teaser
+    object.body[0, 60] + '...'
   end
 end
