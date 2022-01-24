@@ -33,6 +33,7 @@ module YesterdaysNewsApi
         origins '*'
         resource '*',
                  headers: :any,
+                 expose: %w[access-token expiry token-type uid client],
                  methods: %w[get post put delete]
       end
     end
