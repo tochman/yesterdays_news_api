@@ -2,7 +2,7 @@ class Article::IndexSerializer < ActiveModel::Serializer
   attributes :id, :title, :teaser, :published, :category
 
   def published
-    object.created_at
+    object.created_at.to_formatted_s(:long)
   end
 
   def category
